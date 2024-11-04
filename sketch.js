@@ -13,13 +13,15 @@ function draw() {
 }
 
 function drawGrid() {
+  background(0); // Azzera il canvas ogni volta che si ridisegna la griglia
+  
   // Calcolo il numero intero di colonne e righe che si adattano senza uscire dai bordi
-  let columns = floor((windowWidth - 2 * margin) / (glyphSize + gutter)); //floor serve per avere un numero intero di righe e colonne
-  let rows = floor((windowHeight - 2 * margin) / (glyphSize + gutter)); //altezza/larghezza finestra - margini (sopra, sotto/ lati) fratto il glifo + Gutter
+  let columns = floor((windowWidth - 2 * margin) / (glyphSize + gutter)); //floor serve per avere un numero intero per difetto di righe e colonne, divido lo spazio occupato dalla griglia (spazio canvas - margini) per lo spazio occupato dal glyph + gutter
+  let rows = floor((windowHeight - 2 * margin) / (glyphSize + gutter)); //altezza finestra - margini (sopra, sotto/ lati) fratto il glifo + Gutter
   
   // Calcolo un offset per centrare i glifi nel canvas, tenendo conto del margine
-  let offsetX = margin + (windowWidth - 2 * margin - columns * (glyphSize + gutter)) / 2; 
-  let offsetY = margin + (windowHeight - 2 * margin - rows * (glyphSize + gutter)) / 2;
+  let offsetX = margin + (windowWidth - 2 * margin - columns * (glyphSize + gutter)) / 2; //windowWidth - 2 * margin = area disegnabile nel canvas, columns * (glyphSize + gutter) = spazio occupato dalla griglia, /2 = calcola lo spazio a destra e a sinistra non occupato dalla griglia ma disegnabile, + margin = aggiungi a questa distanza a sinistra il margine per avere una distanza uguale a destra e a sinistra del canvas.
+  let offsetY = margin + (windowHeight - 2 * margin - rows * (glyphSize + gutter)) / 2; //concetto della riga superiore ma in direzione verticale, offset dall'alto.
 
   // Disegno righe e colonne in cui si trovano i glyph
   for (let i = 0; i < columns; i++) {
@@ -27,10 +29,10 @@ function drawGrid() {
       push(); 
       // Traslo alla posizione in cui verrà disegnato il glifo, con offset e margine
       translate(
-        offsetX + i * (glyphSize + gutter) + glyphSize / 2, 
-        offsetY + j * (glyphSize + gutter) + glyphSize / 2
+        offsetX + i * (glyphSize + gutter) + glyphSize / 2, //offsetX + i * (glyphSize + gutter) calcola l’inizio del glifo nella colonna corrente., glyphSize / 2 è aggiunto per allineare il centro del glifo con il punto di traslazione, in modo che ogni glifo venga posizionato esattamente al centro della cella della griglia.
+        offsetY + j * (glyphSize + gutter) + glyphSize / 2 //offsetY + j * (glyphSize + gutter) è l’inizio della riga attuale., glyphSize / 2 viene aggiunto per centrare il glifo verticalmente rispetto alla cella.
       );
-      rotate(int(random(0, 4)) * PI / 2);// Ruota casualmente il glifo di 0, 90, 180 o 270 gradi
+      rotate(int(random(0, 4)) * PI / 2);// Ruota casualmente il glifo di 0, 90, 180 o 270 gradi, int fornisce un numero intero senza arrotondamento ma solamente togliendo la parte decimale (0, 1, 2, 3) e lo moltiplica per 90° (PI / 2)
       drawGlyph(); // Funzione disegno del glyph
       pop(); 
     }
@@ -47,7 +49,7 @@ function drawGlyph() {
   line(baselineX1, 0, baselineX2, 0); // Disegna la linea di base: punto 1=estremo sx a 0, punto 2=estremo dx e 0
 
   //Disegno linee perpendicolari alla baseline
-  let numLineePerpendicolari = floor(random(3, 8)); // Numero intero casuale di linee perpendicolari (da 3 a 8)
+  let numLineePerpendicolari = floor(random(3, 9)); // Numero intero casuale di linee perpendicolari (da 3 a 8)
   for (let i = 0; i < numLineePerpendicolari; i++) { //creazione di linee perpedicolari che si ripete un numero di volte uguale al numero random di linee
     let xPosition = random(baselineX1, baselineX2); // Posizione X casuale per la linea perpendicolare sulla baseline che va da -15 a 15.
     let lineLength = random(4, 20); // Lunghezza casuale della linea (da 4 a 20)
