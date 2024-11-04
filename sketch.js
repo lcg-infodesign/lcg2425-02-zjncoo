@@ -17,20 +17,20 @@ function drawGrid() {
   
   // Calcolo il numero intero di colonne e righe che si adattano senza uscire dai bordi
   let columns = floor((windowWidth - 2 * margin) / (glyphSize + gutter)); //floor serve per avere un numero intero per difetto di righe e colonne, divido lo spazio occupato dalla griglia (spazio canvas - margini) per lo spazio occupato dal glyph + gutter
-  let rows = floor((windowHeight - 2 * margin) / (glyphSize + gutter)); //altezza finestra - margini (sopra, sotto/ lati) fratto il glifo + Gutter
+  let rows = floor((windowHeight - 2 * margin) / (glyphSize + gutter)); //(altezza finestra - margini) (sopra, sotto) fratto (glyph + gutter)
   
   // Calcolo un offset per centrare i glifi nel canvas, tenendo conto del margine
-  let offsetX = margin + (windowWidth - 2 * margin - columns * (glyphSize + gutter)) / 2; //windowWidth - 2 * margin = area disegnabile nel canvas, columns * (glyphSize + gutter) = spazio occupato dalla griglia, /2 = calcola lo spazio a destra e a sinistra non occupato dalla griglia ma disegnabile, + margin = aggiungi a questa distanza a sinistra il margine per avere una distanza uguale a destra e a sinistra del canvas.
+  let offsetX = margin + (windowWidth - 2 * margin - columns * (glyphSize + gutter)) / 2; //windowWidth - 2 * margin = area disegnabile nel canvas, columns * (glyphSize + gutter) = spazio occupato dalle colonne della griglia, /2 = calcola lo spazio a destra e a sinistra non occupato dalla griglia ma disegnabile, + margin = aggiungi alla distanza non usata dalla griglia a sinistra il margine per avere una distanza uguale a destra e a sinistra del canvas.
   let offsetY = margin + (windowHeight - 2 * margin - rows * (glyphSize + gutter)) / 2; //concetto della riga superiore ma in direzione verticale, offset dall'alto.
 
   // Disegno righe e colonne in cui si trovano i glyph
   for (let i = 0; i < columns; i++) {
-    for (let j = 0; j < rows; j++) {
+    for (let r = 0; r < rows; r++) {
       push(); 
       // Traslo alla posizione in cui verrà disegnato il glifo, con offset e margine
       translate(
         offsetX + i * (glyphSize + gutter) + glyphSize / 2, //offsetX + i * (glyphSize + gutter) calcola l’inizio del glifo nella colonna corrente., glyphSize / 2 è aggiunto per allineare il centro del glifo con il punto di traslazione, in modo che ogni glifo venga posizionato esattamente al centro della cella della griglia.
-        offsetY + j * (glyphSize + gutter) + glyphSize / 2 //offsetY + j * (glyphSize + gutter) è l’inizio della riga attuale., glyphSize / 2 viene aggiunto per centrare il glifo verticalmente rispetto alla cella.
+        offsetY + r * (glyphSize + gutter) + glyphSize / 2 //offsetY + j * (glyphSize + gutter) è l’inizio della riga attuale., glyphSize / 2 viene aggiunto per centrare il glifo verticalmente rispetto alla cella.
       );
       rotate(int(random(0, 4)) * PI / 2);// Ruota casualmente il glifo di 0, 90, 180 o 270 gradi, int fornisce un numero intero senza arrotondamento ma solamente togliendo la parte decimale (0, 1, 2, 3) e lo moltiplica per 90° (PI / 2)
       drawGlyph(); // Funzione disegno del glyph
